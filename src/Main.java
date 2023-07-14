@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class Main {
 
     Connection conn = null;
-    String table_name = ""; // example
+    String table_name = "dalseong"; // example
 
     public String input(String s) {
         System.out.print(s + " : ");
@@ -17,9 +17,9 @@ public class Main {
     public void connect() throws ClassNotFoundException, SQLException {
         Class.forName("org.mariadb.jdbc.Driver");
 
-        String ip = ""; // 127.0.0.1
-        String port_num = ""; // 3306
-        String schema_name = ""; // example
+        String ip = "127.0.0.1"; // 127.0.0.1
+        String port_num = "3307"; // 3306
+        String schema_name = "trashcan"; // example
 
         String url = "jdbc:mariadb://"+ip+":"+port_num+"/"+schema_name;
         String userid = input("userid"); // root
@@ -29,7 +29,7 @@ public class Main {
     }
 
     public void insert(int lastId) throws SQLException, IOException {
-        FileReader file = new FileReader(""); // C:\data.txt
+        FileReader file = new FileReader("C:\\Users\\jademon\\Downloads\\hii.txt"); // C:\data.txt
         BufferedReader reader = new BufferedReader(file);
         String r;
 
@@ -38,11 +38,11 @@ public class Main {
 
         reader.readLine();
         while (( r = reader.readLine()) != null) {
-            String[] s = r.split(""); // ,
+            String[] s = r.split(","); // ,
 
             pstmt.setInt(1, ++lastId);
             for(int i=1; i<s.length;++i) {
-                pstmt.setString(i+1, s[i]);
+                pstmt.setString(i+1, s[i]); // 첫 열에 number(id)가 있는 경우(혹은 쓸모없는 데이터) : s[i], 첫 열의 데이터도 삽입해야 하는 경우 : s[i-1]
             }
 
             pstmt.executeQuery();
@@ -53,7 +53,7 @@ public class Main {
 
     // Get id(primary key) final value
     public int getFinalId() throws SQLException {
-        String id_column = ""; // id
+        String id_column = "id"; // id
         String sql = "SELECT " + id_column + " FROM " + table_name + " ORDER BY " + id_column + " DESC";
 
         Statement stmt = conn.createStatement();
